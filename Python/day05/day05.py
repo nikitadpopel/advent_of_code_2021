@@ -98,7 +98,7 @@ def part2(lineList):
     for i in moves:
         myboard.makeMovep2(i)
         
-    
+    myboard.printBoard()
     return myboard.checkIntersections()
 
 if __name__ == '__main__':
