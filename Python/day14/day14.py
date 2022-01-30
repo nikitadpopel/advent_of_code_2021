@@ -2,62 +2,47 @@ import sys
 sys.path.append('../')
 from helper_functions import *
 from time import time
+from collections import Counter
 
-class Polymer:
-    def __init__(self, lineList):
-        self.template = lineList[0]
-        self.rules = []
-        for i in lineList[2:]:
-            self.rules.append(i.split(' -> '))
+def calculate(template, rules, stepnum):
+    answer = 0
+    curr_pol = Counter()
+    new_pol = None
+    chars = None
+    for i in range(0, len(template)-1):
+        curr_pol[f'{template[i]}{template[i+1]}'] += 1
 
-    def printState(self):
-        print(self.template)
-        print(self.rules)
 
-    def step(self):
-        newtemplate = ''
-        for x in range(0, len(self.template)-1):
-            tempstr = str(self.template[x]) + str(self.template[x + 1])
-            for j in self.rules:
-                if tempstr == j[0]:
-                    newtemplate += str(self.template[x])
-                    newtemplate += str(j[1])
-        newtemplate += str(self.template[len(self.template)-1])
-        self.template = newtemplate
-        pass
+    for i in range(0, stepnum):
+        new_pol = Counter()
+        chars = Counter()
+        for j,k in curr_pol.items():
+            new_pol[f'{j[0]}{rules[j]}'] += k
+            new_pol[f'{rules[j]}{j[1]}'] += k
+            chars[f'{rules[j]}'] += k
+            chars[f'{j[0]}'] += k
+        chars[f'{template[-1]}'] += 1
+        curr_pol = new_pol
+        new_pol = None
+    answer = chars.most_common()[0][1] - chars.most_common()[-1][1]
+    return answer
 
 def part1(lineList):
-    polymer = Polymer(lineList)
-    for i in range(0, 10):
-        polymer.step()
-
-    all_char = {}
-    for i in polymer.template:
-        if i in all_char:
-            all_char[i] += 1
-        else:
-            all_char[i] = 1
-
-    answer = max(all_char.values()) - min(all_char.values())
-    
+    template = lineList[0]
+    rules = {}
+    for i in lineList[2:]:
+        rule = i.split(' -> ')
+        rules[rule[0]] = rule[1]
+    answer = calculate(template, rules, 10)
     return answer
 
 def part2(lineList):
-    polymer = Polymer(lineList)
-    for i in range(0, 40):
-        start = time()
-        polymer.step()
-        print(str(i) + ' - ' + str(time() - start) + 's')
-
-    all_char = {}
-    for i in polymer.template:
-        if i in all_char:
-            all_char[i] += 1
-        else:
-            all_char[i] = 1
-
-    answer = max(all_char.values()) - min(all_char.values())
-    
+    template = lineList[0]
+    rules = {}
+    for i in lineList[2:]:
+        rule = i.split(' -> ')
+        rules[rule[0]] = rule[1]
+    answer = calculate(template, rules, 40)
     return answer
 
 if __name__ == '__main__':
