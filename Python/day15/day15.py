@@ -64,7 +64,7 @@ class Cave:
                 self.Distance[i] = self.Distance[currVert] + self.spotsval[i]
         return
 
-    def Solve(self):
+    def SolveDijkstras(self):
         while str(self.maxX - 1) + ' ' + str(self.maxY - 1) not in self.ShortPath:
             currVert = self.pickVertex()
             self.updateAdjacent(currVert)
@@ -86,7 +86,7 @@ class Cave:
 
 def part1(lineList):
     cave = Cave(lineList)
-    return cave.Solve()
+    return cave.SolveDijkstras()
 
 def part2(lineList):
     pass
