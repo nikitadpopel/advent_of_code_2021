@@ -2,6 +2,7 @@ import sys
 sys.path.append('../')
 from helper_functions import *
 import random
+import time
 
 class Cave:
     def __init__(self, lineList):
@@ -27,18 +28,13 @@ class Cave:
                 self.spotstr.append(str(i) + ' ' + str(j))
 
         self.Distance['0 0'] = 0
-    
-    def checkFinish(self):
-        result =  all(elem in self.ShortPath  for elem in self.spotstr)
-        if result:
-            return True
-        else:
-            return False
 
     def pickVertex(self):
         for i in self.spotstr:
-            if i not in self.ShortPath and self.Distance[i] != 9999999999999:
+            if self.Distance[i] != 9999999999999:
+                
                 self.ShortPath.append(i)
+                self.spotstr.remove(i)
                 return i
         return False
 
@@ -60,27 +56,19 @@ class Cave:
         return adjList
 
     def updateAdjacent(self, currVert):
+        if not currVert:
+            return
         adjList = self.getAdjacent(currVert)
-        # print('Adjacent Vertices: ' + str(adjList))
         for i in adjList:
             if self.Distance[currVert] + self.spotsval[i] < self.Distance[i]:
                 self.Distance[i] = self.Distance[currVert] + self.spotsval[i]
-        pass
+        return
 
     def Solve(self):
-        iterations = 0
-        while not self.checkFinish():
+        while str(self.maxX - 1) + ' ' + str(self.maxY - 1) not in self.ShortPath:
             currVert = self.pickVertex()
-            # print('Evaluating Vertex <' + str(currVert) + '>...')
             self.updateAdjacent(currVert)
-            iterations += 1
-            print(iterations)
-        
-        self.print()
-        return True
-        
-
-
+        return self.Distance[str(self.maxX-1) + ' ' + str(self.maxY - 1)]
 
     def print(self):
         print('\n--- Cave Layout ---')
@@ -98,8 +86,8 @@ class Cave:
 
 def part1(lineList):
     cave = Cave(lineList)
-    cave.Solve()
-    pass
+    return cave.Solve()
+
 def part2(lineList):
     pass
 
