@@ -99,11 +99,12 @@ def extendCave(lineList):
                 addedVals[y][x] = 0
             else:
                 addedVals[y][x] = k + 1
-    print(addedVals)
     print('-----')
+    print('INTLIST')
+    print(intList)
     for m in addedVals:
-        print(m)
         intList.append(m)
+    print('INTLIST')
     print(intList)
     return intList
 
