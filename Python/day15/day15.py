@@ -75,21 +75,47 @@ class Cave:
         for i in self.spots:
             print(i)
 
-        print('\n--- My Shortest Path Set ---')
-        print(self.ShortPath)
+        # print('\n--- My Shortest Path Set ---')
+        # print(self.ShortPath)
 
-        print('\n--- My Distances ---')
-        print(self.Distance)
+        # print('\n--- My Distances ---')
+        # print(self.Distance)
 
         # print('\n--- My Spot Values ---')
         # print(self.spotsval)
+def extendCave(lineList):
+    intList = []
+    newList = lineList
+    for i in lineList:
+        tempList = []
+        for j in i:
+            tempList.append(int(j))
+        intList.append(tempList)
+    # for i in range(5):
+    addedVals = intList.copy()
+    for y,j in enumerate(addedVals):
+        for x,k in enumerate(j):
+            if k == 9:
+                addedVals[y][x] = 0
+            else:
+                addedVals[y][x] = k + 1
+    print(addedVals)
+    print('-----')
+    for m in addedVals:
+        print(m)
+        intList.append(m)
+    print(intList)
+    return intList
 
 def part1(lineList):
     cave = Cave(lineList)
     return cave.SolveDijkstras()
 
 def part2(lineList):
-    pass
+    lineListExtended = extendCave(lineList)
+    cave = Cave(lineListExtended)
+    cave.print()
+    return cave.SolveDijkstras()
 
 if __name__ == '__main__':
     lineList = readInput('../inputs/input_15.txt')
